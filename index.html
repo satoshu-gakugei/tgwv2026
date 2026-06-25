@@ -1,1 +1,174 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>都丸さんへのMessage</title>
+  <meta name="description" content="計算機科学研究室より、卒業を祝う特別なメッセージページです。">
 
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .box {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 0 10px;
+    }
+
+    h2 { font-size: 28px; margin: 12px 0 18px; }
+    h3 { font-size: 18px; margin: 12px 0 18px; }
+
+    input, button {
+      width: 100%;
+      display: block;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #bbb;
+    }
+
+    button {
+      margin-top: 12px;
+      background: #f2f2f2;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    #msg {
+      margin-top: 12px;
+      min-height: 1.2em;
+    }
+
+    .hint {
+      opacity: 0.7;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    #imgWrap {
+      display: none;
+      margin-top: 18px;
+    }
+
+    #imgWrap img {
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+
+    #backBtn {
+      margin-top: 12px;
+      background: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h3>主務法皇　都丸龍也（城北埼玉中高教諭）</h3>
+    <a href="https://www.seijogakko.ed.jp/" target="_blank">
+  <button>城北埼玉高校の公式サイトはこちら</button>
+    </a>
+    <h3>御即位おめでとうございます。</h3>
+    <h3>新歓高尾山で過去問に釣られて入部を決意したことが、ついこの間のように感じます。</h3>
+    <h3>スタバカードありがとうございました。宮寺研のMacbook Proを開きながらスタバで作業が捗っています。</h3>
+    <h2>焼肉誘ってください。</h2>
+    
+    <img src="./img/narikke.JPG"  alt="なり毛ボーちゃん" style="max-width: 100%; height: auto;">
+
+    <div style="margin-bottom: 20px;">
+  <a href="./img/最終レポート_ネットワークシステム.pdf" target="_blank" style="text-decoration: none;">
+    <button type="button" style="background: #007bff; color: white; border: none; font-weight: bold;">
+     私からの送辞PDF
+    </button>
+  </a>
+</div>
+
+    <h2>パスワードを入力してください</h2>
+
+    <!-- 入力エリア -->
+    <div id="authArea">
+      <input id="pw" type="password" placeholder="Password" autocomplete="off" />
+      <button id="btn" type="button">表示</button>
+      <div class="hint">※パスワードに応じて"公式より先に"画像が表示されます。</div>
+    </div>
+
+    <div id="msg"></div>
+
+    <!-- 画像エリア -->
+    <div id="imgWrap">
+      <img id="secretImg" alt="secret" />
+      <button id="backBtn" type="button">戻る</button>
+    </div>
+  </div>
+
+  <script>
+    // ▼ パスワード → 表示画像の対応表
+    const PASSWORD_IMAGE_MAP = {
+      "289cqd": "./img/tomatatsu.jpg",
+      "tatsuya_ygt": "./img/tomatatsu2.jpg"
+    };
+
+    const pw = document.getElementById("pw");
+    const btn = document.getElementById("btn");
+    const msg = document.getElementById("msg");
+    const imgWrap = document.getElementById("imgWrap");
+    const img = document.getElementById("secretImg");
+    const backBtn = document.getElementById("backBtn");
+    const authArea = document.getElementById("authArea");
+
+    function showMessage(text, ok=false) {
+      msg.textContent = text;
+      msg.style.color = ok ? "green" : "crimson";
+    }
+
+    function showImage(imageUrl) {
+      img.src = imageUrl;
+      imgWrap.style.display = "block";
+      authArea.style.display = "none";
+    }
+
+    function resetToPassword() {
+      imgWrap.style.display = "none";
+      img.src = "";
+      authArea.style.display = "block";
+      showMessage("", true);
+      pw.value = "";
+      pw.focus();
+    }
+
+    function check() {
+      const input = pw.value;
+      const imageUrl = PASSWORD_IMAGE_MAP[input];
+
+      if (imageUrl) {
+        showMessage("たっちゃん！おつかれ！", true);
+        showImage(imageUrl);
+      } else {
+        showMessage("パスワードが違います。");
+      }
+    }
+
+    btn.addEventListener("click", check);
+
+    pw.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") check();
+    });
+
+    backBtn.addEventListener("click", resetToPassword);
+
+    pw.focus();
+  </script>
+</body>
+</html>
