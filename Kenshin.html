@@ -2,184 +2,70 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
 <title>For Kenshin</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
 
 body{
-    min-height:100vh;
+background:#0d1117;
+color:white;
+font-family:sans-serif;
 
-    background:
-    radial-gradient(circle at top left,#2d4059 0%,transparent 45%),
-    radial-gradient(circle at bottom right,#1b2845 0%,transparent 45%),
-    linear-gradient(135deg,#0d1117,#111827);
+display:flex;
+justify-content:center;
+align-items:center;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+min-height:100vh;
 
-    color:white;
-    font-family:
-        "Hiragino Sans",
-        "Noto Sans JP",
-        sans-serif;
-
-    padding:30px;
+margin:0;
 }
 
 .card{
-    width:min(820px,95%);
-    background:rgba(255,255,255,0.08);
 
-    backdrop-filter:blur(18px);
+width:700px;
 
-    border:1px solid rgba(255,255,255,.12);
+padding:50px;
 
-    border-radius:28px;
+background:#1a2235;
 
-    padding:60px 45px;
+border-radius:24px;
 
-    text-align:center;
+text-align:center;
 
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.4);
-}
-
-.sub{
-    letter-spacing:4px;
-    font-size:12px;
-    opacity:.65;
-
-    margin-bottom:20px;
-}
-
-h1{
-    font-size:42px;
-    margin-bottom:18px;
-}
-
-.message{
-    font-size:18px;
-    line-height:1.9;
-    color:rgba(255,255,255,.82);
-
-    margin-bottom:42px;
-}
-
-.input-area{
-    display:flex;
-    gap:12px;
-
-    justify-content:center;
-    flex-wrap:wrap;
 }
 
 input{
-    width:300px;
 
-    padding:16px 18px;
+padding:16px;
 
-    border:none;
+width:280px;
 
-    border-radius:14px;
+border-radius:12px;
 
-    background:rgba(255,255,255,.1);
+border:none;
 
-    color:white;
+margin-right:10px;
 
-    outline:none;
-
-    font-size:16px;
-}
-
-input::placeholder{
-    color:rgba(255,255,255,.45);
 }
 
 button{
-    padding:16px 28px;
 
-    border:none;
+padding:16px 24px;
 
-    border-radius:14px;
+border:none;
 
-    cursor:pointer;
+border-radius:12px;
 
-    color:white;
+cursor:pointer;
 
-    background:
-        linear-gradient(
-            135deg,
-            #5b8cff,
-            #8b5cf6
-        );
-
-    font-size:16px;
-
-    transition:.25s;
-}
-
-button:hover{
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 12px 30px
-        rgba(108,99,255,.35);
 }
 
 #error{
-    margin-top:18px;
-
-    color:#ff7c7c;
-
-    min-height:24px;
-}
-
-#videoWrap{
-
-    display:none;
-
-    margin-top:42px;
-
-    opacity:0;
-
-    transform:translateY(18px);
-
-    transition:
-        .7s;
-}
-
-#videoWrap.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-video{
-    width:100%;
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.45);
-}
-
-.note{
-    margin-top:16px;
-
-    font-size:13px;
-
-    opacity:.55;
+margin-top:18px;
+color:#ff8f8f;
 }
 
 </style>
@@ -189,102 +75,72 @@ video{
 
 <div class="card">
 
-<div class="sub">
-MESSAGE 
-</div>
-
 <h1>中崎健心君へ</h1>
 
-<div class="message">
+<p>
 この動画を見て、<br>
 少し立ち止まって自分自身を振り返ってみてください。
-</div>
+</p>
 
-<div class="input-area">
+<br>
+
 <input
 id="pw"
 type="password"
 placeholder="Password">
 
-<button onclick="openVideo()">
+<button onclick="login()">
 OPEN
 </button>
-</div>
 
 <div id="error"></div>
-
-<div id="videoWrap">
-
-<video
-id="movie"
-controls
-playsinline
-preload="metadata"
-style="
-width:auto;
-height:75vh;
-max-width:100%;
-border-radius:18px;
-">
-
-<source
-src="./kenshin.mp4"
-type="video/mp4">
-
-動画を再生できません
-
-</video>
-
-<div class="note">
-Video unlocked
-</div>
-
-</div>
 
 </div>
 
 <script>
 
-function openVideo(){
+async function login(){
 
-const pass =
+const pw=
 document
-.getElementById("pw")
+.getElementById(
+"pw"
+)
 .value;
 
-const correct =
-"Shirushi";
+const res=
+await fetch(
+"./check.php",
+{
+method:"POST",
 
-const videoArea =
-document
-.getElementById("videoWrap");
+headers:{
+"Content-Type":
+"application/json"
+},
 
-const error =
-document
-.getElementById("error");
-
-if(pass===correct){
-
-videoArea.style.display=
-"block";
-
-setTimeout(()=>{
-videoArea.classList.add(
-"show"
+body:
+JSON.stringify({
+password:pw
+})
+}
 );
-},50);
 
-error.textContent="";
+const data=
+await res.json();
 
-document
-.getElementById("movie")
-.scrollIntoView({
-behavior:"smooth"
-});
+if(data.ok){
+
+location.href=
+"./stream.php";
 
 }else{
 
-error.textContent=
+document
+.getElementById(
+"error"
+)
+.textContent=
 "Password が違います";
 
 }
@@ -292,13 +148,22 @@ error.textContent=
 }
 
 document
-.getElementById("pw")
+.getElementById(
+"pw"
+)
 .addEventListener(
 "keydown",
-function(e){
-if(e.key==="Enter"){
-openVideo();
+e=>{
+
+if(
+e.key
+==="Enter"
+){
+
+login();
+
 }
+
 }
 );
 
